@@ -8,7 +8,7 @@
 	</module>
 
 	<module name="network">
-		<param name="inputNetworkFile" value="network.xml" />
+		<param name="inputNetworkFile" value="modified_network.xml" />
 	</module>
 
 	<module name="plans">
@@ -16,7 +16,7 @@
 	</module>
 
 	<module name="controler">
-		<param name="outputDirectory" value="./output" />
+		<param name="outputDirectory" value="./output_mod" />
 		<param name="firstIteration" value="0" />
 		<param name="lastIteration" value="10" />
 	</module>
