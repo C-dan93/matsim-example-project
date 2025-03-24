@@ -132,7 +132,7 @@ public class RunMatsim{
 		}
 
 		{
-			//Adjust the speed of the pedelec
+			//Adjust the speed of the car
 			Id<VehicleType>vehicleId = Id.create( "car", VehicleType.class);
 			VehicleType carType = VehicleUtils.createVehicleType(vehicleId);
 			carType.setMaximumVelocity(100/3.6);
