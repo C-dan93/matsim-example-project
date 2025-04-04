@@ -48,7 +48,7 @@ import java.util.Set;
  * @author nagel
  *
  */
-public class RunMatsim{
+public class RunMatsimBaseLine{
 
 	public static void main(String[] args) {
 
@@ -61,7 +61,7 @@ public class RunMatsim{
 
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 		config.controller().setLastIteration(3);
-		config.controller().setOutputDirectory("output/network_restricted");
+		config.controller().setOutputDirectory("output/scenario_baseline");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
 //
@@ -104,33 +104,7 @@ public class RunMatsim{
 
 		}
 //
-		{
-			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
-			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.SubtourModeChoice);
-			settings.setWeight(0.1);
-			config.replanning().addStrategySettings(settings);
-		}
 
-		{
-			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
-			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute);
-			settings.setWeight(0.2);
-			config.replanning().addStrategySettings(settings);
-		}
-
-		{
-			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
-			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ChangeSingleTripMode);
-			settings.setWeight(0.1);
-			config.replanning().addStrategySettings(settings);
-		}
-
-		{
-			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
-			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta);
-			settings.setWeight(0.6);
-			config.replanning().addStrategySettings(settings);
-		}
 
 		{
 			String[]modes={"car","pedelec", "bike", "pt"};
