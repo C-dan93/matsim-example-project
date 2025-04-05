@@ -19,10 +19,10 @@ public class AdjustOriginalNetwork {
         for (Link link : network.getLinks().values()) {
             String linkId = link.getId().toString();
 
-            if (linkId.equals("6") || linkId.equals("7")) {
+            if (linkId.equals("2") || linkId.equals("7")) {
                 // Restrict to bike and pedelec only, reduce speed and capacity to discourage car usage
-                link.setFreespeed(link.getFreespeed() * 0.4);
-                link.setCapacity(link.getCapacity() * 0.5);
+                link.setFreespeed(link.getFreespeed() * 1);
+                link.setCapacity(link.getCapacity() * 1);
                 Set<String> allowed = new HashSet<>();
                 allowed.add("bike");
                 allowed.add("pedelec");

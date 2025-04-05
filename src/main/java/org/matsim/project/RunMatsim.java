@@ -20,9 +20,12 @@ package org.matsim.project;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.events.LinkEnterEvent;
+import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.QSimConfigGroup;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
@@ -60,7 +63,7 @@ public class RunMatsim{
 		}
 
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
-		config.controller().setLastIteration(3);
+		config.controller().setLastIteration(10);
 		config.controller().setOutputDirectory("output/network_restricted");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
@@ -203,16 +206,41 @@ public class RunMatsim{
 			scenario.getVehicles().addVehicleType(carType);
 		}
 		//Needed to do this to add
-		for(Link link: scenario.getNetwork().getLinks().values()){
-			Set<String>modes = new HashSet<>();
-			modes.add("car");
-			modes.add("pedelec");
-			modes.add("bike");
-			modes.add("pt");
-			link.setAllowedModes(modes);
-		}
+//		for(Link link: scenario.getNetwork().getLinks().values()){
+//
+//			String linkId = link.getId().toString();
+//			if (linkId.equals("6") || linkId.equals("7")){
+//				continue;
+//			}
+//
+//			Set<String>modes = new HashSet<>();
+//			modes.add("car");
+//			modes.add("pedelec");
+//			modes.add("bike");
+//			modes.add("pt");
+//			link.setAllowedModes(modes);
+//		}
 
 		Controler controler = new Controler( scenario) ;
+		// Add this to your simulation setup
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				addEventHandlerBinding().toInstance(new LinkEnterEventHandler() {
+					@Override
+					public void handleEvent(LinkEnterEvent event) {
+						String linkId = event.getLinkId().toString();
+						if (linkId.equals("2") || linkId.equals("7")) {
+							System.out.println("Vehicle " + event.getVehicleId() +
+									" entered restricted link " + linkId);
+						}
+					}
+
+					@Override
+					public void reset(int iteration) {}
+				});
+			}
+		});
 
 		// possibly modify controler here
 

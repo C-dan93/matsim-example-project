@@ -60,7 +60,7 @@ public class RunMatsimBaseLine{
 		}
 
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
-		config.controller().setLastIteration(3);
+		config.controller().setLastIteration(10);
 		config.controller().setOutputDirectory("output/scenario_baseline");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
