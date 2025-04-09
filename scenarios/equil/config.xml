@@ -8,17 +8,17 @@
 	</module>
 
 	<module name="network">
-		<param name="inputNetworkFile" value="network_restricted.xml" />
+		<param name="inputNetworkFile" value="network_penalized_car.xml" />
 	</module>
 
 	<module name="plans">
-		<param name="inputPlansFile" value="plans100.xml" />
+		<param name="inputPlansFile" value="plans100_diverse.xml" />
 	</module>
 
 	<module name="controler">
 		<param name="outputDirectory" value="./output" />
 		<param name="firstIteration" value="0" />
-		<param name="lastIteration" value="10" />
+		<param name="lastIteration" value="3" />
 	</module>
 
 	<module name="qsim">
@@ -30,6 +30,7 @@
 	</module>
 
 	<module name="planCalcScore">
+<!--		<param name="networkModes" value="car, bike, pedelec"/>-->
 		<param name="learningRate" value="1.0" />
 		<param name="BrainExpBeta" value="2.0" />
 

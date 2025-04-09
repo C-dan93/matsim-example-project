@@ -20,9 +20,15 @@ package org.matsim.project;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.events.PersonDepartureEvent;
+import org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.contrib.parking.parkingchoice.PC2.simulation.ParkingDepartureEvent;
+import org.matsim.contrib.parking.parkingchoice.PC2.simulation.ParkingDepartureEventHandler;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.QSimConfigGroup;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
@@ -34,6 +40,9 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.ScoringConfigGroup;
 import org.matsim.core.config.groups.RoutingConfigGroup;
 import org.matsim.core.config.groups.ReplanningConfigGroup;
+import org.matsim.core.scoring.ScoringFunction;
+import org.matsim.core.scoring.ScoringFunctionFactory;
+import org.matsim.freight.carriers.controler.CarrierScoringFunctionFactory;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 import org.matsim.vehicles.VehicleUtils;
@@ -193,6 +202,20 @@ public class RunMatsimBaseLine{
 //		controler.addOverridingModule( new OTFVisLiveModule() ) ;
 
 //		controler.addOverridingModule( new SimWrapperModule() );
+
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				addEventHandlerBinding().toInstance(new PersonDepartureEventHandler() {
+					@Override
+					public void handleEvent(PersonDepartureEvent event) {
+						System.out.println("Agent" + event.getPersonId()+ "departed mode" + event.getLegMode());
+					}
+				});
+
+			}
+		});
+
 
 		// ---
 

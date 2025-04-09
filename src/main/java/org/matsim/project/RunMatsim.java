@@ -21,7 +21,9 @@ package org.matsim.project;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
+import org.matsim.api.core.v01.events.PersonDepartureEvent;
 import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
+import org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.QSimConfigGroup;
@@ -63,8 +65,8 @@ public class RunMatsim{
 		}
 
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
-		config.controller().setLastIteration(10);
-		config.controller().setOutputDirectory("output/network_restricted");
+		config.controller().setLastIteration(2);
+		config.controller().setOutputDirectory("output/test");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
 //
@@ -247,6 +249,19 @@ public class RunMatsim{
 //		controler.addOverridingModule( new OTFVisLiveModule() ) ;
 
 //		controler.addOverridingModule( new SimWrapperModule() );
+
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				addEventHandlerBinding().toInstance(new PersonDepartureEventHandler() {
+					@Override
+					public void handleEvent(PersonDepartureEvent event) {
+						System.out.println("Agent" + event.getPersonId()+ "departed mode" + event.getLegMode());
+					}
+				});
+
+			}
+		});
 
 		// ---
 
