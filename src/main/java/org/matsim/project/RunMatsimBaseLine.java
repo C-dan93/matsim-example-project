@@ -72,7 +72,7 @@ public class RunMatsimBaseLine{
 		config.controller().setLastIteration(10);
 		config.controller().setOutputDirectory("output/scenario_baseline");
 		config.network().setInputFile("network.xml");
-		config.plans().setInputFile("plans100.xml");
+		config.plans().setInputFile("plans100_diverse.xml");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
 //
