@@ -26,13 +26,15 @@ public class ModifyPlans {
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
         // 3. Initialize attributes
-        ObjectAttributes attributes = new ObjectAttributes();
+//        ObjectAttributes attributes = new ObjectAttributes();
         Random random = new Random(1234);
+
+
 
         // 4. Mode options
         List<String> modes = Arrays.asList(TransportMode.car, "bike", "pedelec");
 
-        // 5. Valid LINK sequences (not node sequences)
+//        // 5. Valid LINK sequences (not node sequences)
         List<String> validLinkRoutes = Arrays.asList(
                 "1 2",    // Link IDs for 1→2→3
                 "6 15",   // Link IDs for 2→7→12
@@ -67,13 +69,12 @@ public class ModifyPlans {
             }
 
             // 6d. Add income attribute
-            attributes.putAttribute(person.getId().toString(), "income",
-                    random.nextDouble() > 0.5 ? "high" : "low");
+            person.getAttributes().putAttribute( "income", random.nextDouble() > 0.5 ? "high" : "low");
         }
 
         // 7. Save outputs
         new PopulationWriter(scenario.getPopulation()).write("scenarios/equil/plans100_diverse.xml");
-        new ObjectAttributesXmlWriter(attributes).writeFile("scenarios/equil/person_attributes.xml");
+//        new ObjectAttributesXmlWriter(attributes).writeFile("scenarios/equil/person_attributes.xml");
 
         System.out.println("Successfully created:");
         System.out.println("- Modified plans: plans100_diverse.xml");

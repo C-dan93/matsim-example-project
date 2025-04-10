@@ -18,6 +18,7 @@
 //		* *********************************************************************** */
 package org.matsim.project;
 
+import javafx.util.Builder;
 import org.matsim.analysis.ModeStatsControlerListener;
 import org.matsim.analysis.ScoreStatsControlerListener;
 import org.matsim.api.core.v01.Id;
@@ -26,6 +27,7 @@ import org.matsim.api.core.v01.events.LinkEnterEvent;
 import org.matsim.api.core.v01.events.PersonDepartureEvent;
 import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
 import org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler;
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.QSimConfigGroup;
@@ -41,10 +43,15 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.ScoringConfigGroup;
 import org.matsim.core.config.groups.RoutingConfigGroup;
 import org.matsim.core.config.groups.ReplanningConfigGroup;
+import org.matsim.core.scoring.ScoringFunctionFactory;
+import org.matsim.utils.objectattributes.ObjectAttributes;
+import org.matsim.utils.objectattributes.ObjectAttributesXmlReader;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 import org.matsim.vehicles.VehicleUtils;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -67,9 +74,11 @@ public class RunMatsim{
 		}
 
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
-		config.controller().setLastIteration(2);
-		config.controller().setOutputDirectory("output/penalized");
-		config.network().setInputFile("equil/network_penalized_car");
+		config.controller().setLastIteration(10);
+		config.controller().setOutputDirectory("output/restricted");
+		config.network().setInputFile("network_restricted.xml");
+		config.plans().setInputFile("plans100_diverse.xml");
+//		config.plans().setInputPersonAttributeFile("person_attributes.xml");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
 //
@@ -203,6 +212,16 @@ public class RunMatsim{
 //			config.routing().addTeleportedModeParams(params);
 //		}
 		Scenario scenario = ScenarioUtils.loadScenario(config) ;
+
+		{
+		ObjectAttributes attributes = new ObjectAttributes();
+		new ObjectAttributesXmlReader(attributes)
+				.readFile("scenarios/equil/person_attributes.xml");
+		System.out.println("First person's income: " + attributes.getAttribute(
+				scenario.getPopulation().getPersons().keySet().iterator().next().toString(), "income")
+		);
+		}
+
 		{
 			//Adjust the speed of the pedelec
 			Id<VehicleType>vehicleId = Id.create( "pedelec", VehicleType.class);
@@ -248,12 +267,14 @@ public class RunMatsim{
 			@Override
 			public void install() {
 				addEventHandlerBinding().toInstance(new LinkEnterEventHandler() {
+					private final Set<String> restrictedLinks = Set.of("2", "3", "4", "8", "9", "10");
 					@Override
 					public void handleEvent(LinkEnterEvent event) {
 						String linkId = event.getLinkId().toString();
-						if (linkId.equals("2") || linkId.equals("7")) {
-							System.out.println("Vehicle " + event.getVehicleId() +
-									" entered restricted link " + linkId);
+//						if (linkId.equals("2") || linkId.equals("7")) {
+						if (restrictedLinks.contains(linkId)){
+							System.out.println("[" + event.getTime() + " s] Vehicle " + event.getVehicleId() +
+									" entered Restricted link " + linkId);
 						}
 					}
 
@@ -289,6 +310,8 @@ public class RunMatsim{
 				bind(ScoreStatsControlerListener.class);
 			}
 		});
+
+
 
 		// ---
 

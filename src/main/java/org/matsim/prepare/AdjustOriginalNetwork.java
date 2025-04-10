@@ -16,13 +16,15 @@ public class AdjustOriginalNetwork {
 
         Network network = NetworkUtils.readNetwork(inputNetwork);
 
+        Set<String> restrictedLinks = Set.of("2", "3", "4", "8", "9", "10");
+
         for (Link link : network.getLinks().values()) {
             String linkId = link.getId().toString();
 
-            if (linkId.equals("2") || linkId.equals("7")) {
+            if (restrictedLinks.contains(linkId)) {
                 // Restrict to bike and pedelec only, reduce speed and capacity to discourage car usage
-                link.setFreespeed(link.getFreespeed() * 1);
-                link.setCapacity(link.getCapacity() * 1);
+                link.setFreespeed(link.getFreespeed(10 / 3.6) );
+                link.setCapacity(link.getCapacity(400));
                 Set<String> allowed = new HashSet<>();
                 allowed.add("bike");
                 allowed.add("pedelec");
