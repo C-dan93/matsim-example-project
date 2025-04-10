@@ -113,6 +113,33 @@ public class RunMatsimBaseLine{
 
 		}
 //
+		{
+			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
+			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.SubtourModeChoice);
+			settings.setWeight(0.1);
+			config.replanning().addStrategySettings(settings);
+		}
+
+		{
+			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
+			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute);
+			settings.setWeight(0.2);
+			config.replanning().addStrategySettings(settings);
+		}
+
+		{
+			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
+			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ChangeSingleTripMode);
+			settings.setWeight(0.1);
+			config.replanning().addStrategySettings(settings);
+		}
+
+		{
+			ReplanningConfigGroup.StrategySettings settings = new ReplanningConfigGroup.StrategySettings();
+			settings.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta);
+			settings.setWeight(0.6);
+			config.replanning().addStrategySettings(settings);
+		}
 
 
 		{
@@ -182,7 +209,7 @@ public class RunMatsimBaseLine{
 			//Adjust the speed of the pedelec
 			Id<VehicleType>vehicleId = Id.create( "bike", VehicleType.class);
 			VehicleType carType = VehicleUtils.createVehicleType(vehicleId);
-			carType.setMaximumVelocity(50/3.6);
+			carType.setMaximumVelocity(15/3.6);
 			scenario.getVehicles().addVehicleType(carType);
 		}
 		//Needed to do this to add

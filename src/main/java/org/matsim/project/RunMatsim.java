@@ -18,6 +18,8 @@
 //		* *********************************************************************** */
 package org.matsim.project;
 
+import org.matsim.analysis.ModeStatsControlerListener;
+import org.matsim.analysis.ScoreStatsControlerListener;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
@@ -66,12 +68,29 @@ public class RunMatsim{
 
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 		config.controller().setLastIteration(2);
-		config.controller().setOutputDirectory("output/test");
+		config.controller().setOutputDirectory("output/penalized");
+		config.network().setInputFile("equil/network_penalized_car");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
 //
 //		// possibly modify config here
+
+//		// Add at the start of main():
+//		String policyType = "penalized"; // or "restricted" or "baseline"
+//		config.controller().setOutputDirectory("output/"+policyType);
 //
+//// Policy-specific network selection
+//		switch(policyType) {
+//			case "restricted":
+//				config.network().setInputFile("scenarios/equil/network_restricted.xml");
+//				break;
+//			case "penalized":
+//				config.network().setInputFile("scenarios/equil/network_penalized_car.xml");
+//				break;
+//			default:
+//				config.network().setInputFile("scenarios/equil/network.xml");
+//		}
+////
 		{
 			Collection<String>modes = new ArrayList<>();
 			modes.add(TransportMode.car);
@@ -260,6 +279,14 @@ public class RunMatsim{
 					}
 				});
 
+			}
+		});
+
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				bind(ModeStatsControlerListener.class);
+				bind(ScoreStatsControlerListener.class);
 			}
 		});
 
