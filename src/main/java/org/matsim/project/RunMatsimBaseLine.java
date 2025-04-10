@@ -71,6 +71,8 @@ public class RunMatsimBaseLine{
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 		config.controller().setLastIteration(10);
 		config.controller().setOutputDirectory("output/scenario_baseline");
+		config.network().setInputFile("network.xml");
+		config.plans().setInputFile("plans100.xml");
 
 		config.qsim().setLinkDynamics(QSimConfigGroup.LinkDynamics.PassingQ);
 //

@@ -75,8 +75,8 @@ public class RunMatsim{
 
 		config.controller().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 		config.controller().setLastIteration(10);
-		config.controller().setOutputDirectory("output/restricted");
-		config.network().setInputFile("network_restricted.xml");
+		config.controller().setOutputDirectory("output/penalized");
+		config.network().setInputFile("network_penalized_car.xml");
 		config.plans().setInputFile("plans100_diverse.xml");
 //		config.plans().setInputPersonAttributeFile("person_attributes.xml");
 
